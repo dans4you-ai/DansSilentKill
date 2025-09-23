@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DansSilentKill - The Weeknd</title>
+    <title>DansSilentKill - Bug WhatsApp</title>
     <style>
         * {
             margin: 0;
@@ -43,6 +43,13 @@
         .logo {
             width: 60px;
             height: auto;
+            filter: drop-shadow(0 0 10px rgba(255, 58, 94, 0.7));
+            transition: all 0.5s ease;
+        }
+        
+        .logo:hover {
+            filter: drop-shadow(0 0 20px rgba(255, 58, 94, 1));
+            transform: scale(1.05);
         }
         
         .title-section {
@@ -65,6 +72,7 @@
         .thumbnail-section {
             margin: 30px 0;
             text-align: center;
+            display: block; /* Pastikan thumbnail-section selalu ditampilkan */
         }
         
         .thumbnail {
@@ -80,6 +88,12 @@
             position: relative;
             overflow: hidden;
             border: 2px solid rgba(255, 58, 94, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .thumbnail:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
         }
         
         .thumbnail-overlay {
@@ -436,7 +450,7 @@
         </div>
         
         <footer>
-            <p>DansSilentKill &copy; 2023 - The Weeknd</p>
+            <p>DansSilentKill &copy; 2025 - All Right Reserved</p>
         </footer>
     </div>
 
@@ -548,6 +562,25 @@
                     document.querySelector('.bug-option').click();
                 }
             }, 100);
+        });
+        
+        // Tambahkan efek cahaya berdenyut pada logo saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            const logo = document.querySelector('.logo');
+            
+            // Tambahkan efek berdenyut pada logo
+            function pulseLogo() {
+                logo.style.filter = 'drop-shadow(0 0 15px rgba(255, 58, 94, 1))';
+                setTimeout(() => {
+                    logo.style.filter = 'drop-shadow(0 0 8px rgba(255, 58, 94, 0.7))';
+                }, 1000);
+            }
+            
+            // Jalankan efek berdenyut setiap 2 detik
+            setInterval(pulseLogo, 2000);
+            
+            // Jalankan sekali saat halaman dimuat
+            setTimeout(pulseLogo, 500);
         });
     </script>
 </body>
