@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DansSilentKill - Bug WhatsApp</title>
+    <title>DansSilentKill - The Weeknd</title>
     <style>
         * {
             margin: 0;
@@ -41,7 +41,7 @@
         }
         
         .logo {
-            width: 60px; /* Logo diperkecil */
+            width: 60px;
             height: auto;
         }
         
@@ -118,7 +118,7 @@
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
             border: 1px solid rgba(255, 58, 94, 0.3);
-            display: none; /* Hidden by default */
+            display: none;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s ease;
@@ -167,6 +167,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
+            height: 80px;
         }
         
         .bug-option:hover {
@@ -196,18 +197,14 @@
         
         .bug-content {
             flex: 1;
+            display: flex;
+            align-items: center;
         }
         
         .bug-title {
             font-weight: bold;
             color: #ff3a5e;
-            margin-bottom: 5px;
             font-size: 1.3rem;
-        }
-        
-        .bug-desc {
-            opacity: 0.8;
-            font-size: 0.95rem;
         }
         
         .whatsapp-section {
@@ -216,7 +213,7 @@
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
             border: 1px solid rgba(255, 58, 94, 0.3);
-            display: none; /* Hidden by default */
+            display: none;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s ease;
@@ -339,6 +336,7 @@
             
             .bug-option {
                 padding: 15px;
+                height: 70px;
             }
             
             .bug-icon {
@@ -404,28 +402,24 @@
                         <div class="bug-icon">⚠️</div>
                         <div class="bug-content">
                             <div class="bug-title">• CRASH IOS</div>
-                            <div class="bug-desc">Causes iOS devices to crash unexpectedly with a single message</div>
                         </div>
                     </div>
                     <div class="bug-option" data-bug="forclose-beta">
                         <div class="bug-icon">🔄</div>
                         <div class="bug-content">
                             <div class="bug-title">• FORCLOSE BETA</div>
-                            <div class="bug-desc">Forces beta applications to close immediately upon receiving message</div>
                         </div>
                     </div>
                     <div class="bug-option" data-bug="invisible-hard">
                         <div class="bug-icon">👻</div>
                         <div class="bug-content">
                             <div class="bug-title">• INVISIBLE HARD</div>
-                            <div class="bug-desc">Makes UI elements invisible, requires hard reset to fix</div>
                         </div>
                     </div>
                     <div class="bug-option" data-bug="spam-call">
                         <div class="bug-icon">📞</div>
                         <div class="bug-content">
                             <div class="bug-title">• SPAM CALL</div>
-                            <div class="bug-desc">Generates continuous spam calls to target number for extended period</div>
                         </div>
                     </div>
                 </div>
@@ -494,8 +488,11 @@
                 // Add active class to clicked option
                 this.classList.add('active');
                 
-                // Update the WhatsApp input placeholder
+                // Update the button text to show selected bug type
                 const bugType = this.querySelector('.bug-title').textContent.trim();
+                showBugMenuBtn.textContent = bugType;
+                
+                // Update the WhatsApp input placeholder
                 document.querySelector('.whatsapp-input input').placeholder = 
                     `Enter number for ${bugType}...`;
             });
