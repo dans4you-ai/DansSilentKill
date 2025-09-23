@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DansSilentKill - The Weeknd</title>
+    <title>DansSilentKill - Bug WhatsApp</title>
     <style>
         * {
             margin: 0;
@@ -41,12 +41,15 @@
         }
         
         .logo {
-            width: 150px;
+            width: 60px; /* Logo diperkecil */
             height: auto;
         }
         
         .title-section {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
             margin: 20px 0 40px;
         }
         
@@ -56,6 +59,7 @@
             text-shadow: 0 0 10px rgba(255, 58, 94, 0.7);
             letter-spacing: 3px;
             font-weight: 800;
+            margin: 0;
         }
         
         .thumbnail-section {
@@ -304,12 +308,17 @@
                 padding: 15px;
             }
             
-            .thumbnail {
-                height: 250px;
+            .title-section {
+                flex-direction: column;
+                gap: 10px;
             }
             
             .title-section h1 {
                 font-size: 2.5rem;
+            }
+            
+            .thumbnail {
+                height: 250px;
             }
             
             .thumbnail-overlay h2 {
@@ -365,10 +374,11 @@
 <body>
     <div class="container">
         <header>
-            <img src="https://files.catbox.moe/xnu6qm.png" alt="The Weeknd Logo" class="logo">
+            <!-- Header kosong karena logo dipindah ke title-section -->
         </header>
         
         <div class="title-section">
+            <img src="https://files.catbox.moe/xnu6qm.png" alt="The Weeknd Logo" class="logo">
             <h1>DansSilentKill</h1>
         </div>
         
