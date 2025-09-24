@@ -16,7 +16,7 @@
             background: #0a0a0a;
             color: #fff;
             line-height: 1.6;
-            background-image: url('https://files.catbox.moe/himhdy.jpeg');
+            background-image: url('https://files.catbox.moe/on2ecg.jpg');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
@@ -124,7 +124,43 @@
             max-width: 600px;
         }
         
-        /* Video controls dihapus */
+        .volume-control {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .volume-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .volume-slider {
+            width: 80px;
+            -webkit-appearance: none;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ff3a5e;
+            cursor: pointer;
+        }
         
         .main-content {
             display: flex;
@@ -387,6 +423,16 @@
                 width: 100%;
                 max-width: 300px;
             }
+            
+            .volume-control {
+                top: 5px;
+                right: 5px;
+                padding: 3px 8px;
+            }
+            
+            .volume-slider {
+                width: 60px;
+            }
         }
     </style>
 </head>
@@ -411,7 +457,10 @@
                     <h2>DansForyu</h2>
                     <p>Strike Quiet, Crash Loud</p>
                 </div>
-                <!-- Tombol kontrol video dihapus -->
+                <div class="volume-control">
+                    <button class="volume-btn" id="volumeToggle">🔇</button>
+                    <input type="range" min="0" max="1" step="0.1" value="1" class="volume-slider" id="volumeSlider">
+                </div>
             </div>
         </div>
         
@@ -473,8 +522,36 @@
         const bugSection = document.getElementById('bugSection');
         const whatsappSection = document.getElementById('whatsappSection');
         const video = document.querySelector('.thumbnail-video');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeToggle = document.getElementById('volumeToggle');
         
-        // Video autoplay dengan muted untuk menghindari pembatasan browser
+        // Set volume maksimum (1.0 = 100%)
+        video.volume = 1.0;
+        
+        // Kontrol volume dengan slider
+        volumeSlider.addEventListener('input', function() {
+            video.volume = this.value;
+            updateVolumeIcon();
+        });
+        
+        // Toggle mute/unmute
+        volumeToggle.addEventListener('click', function() {
+            video.muted = !video.muted;
+            updateVolumeIcon();
+        });
+        
+        // Update ikon volume berdasarkan status
+        function updateVolumeIcon() {
+            if (video.muted || video.volume === 0) {
+                volumeToggle.textContent = '🔇';
+            } else if (video.volume < 0.5) {
+                volumeToggle.textContent = '🔈';
+            } else {
+                volumeToggle.textContent = '🔊';
+            }
+        }
+        
+        // Video autoplay dengan strategi yang lebih baik
         document.addEventListener('DOMContentLoaded', function() {
             const logo = document.querySelector('.logo');
             
@@ -492,20 +569,39 @@
             // Jalankan sekali saat halaman dimuat
             setTimeout(pulseLogo, 500);
             
-            // Pastikan video otomatis diputar
-            video.muted = true; // Muted untuk menghindari pembatasan autoplay
-            video.loop = true;
-            
-            // Coba putar video
-            const playVideo = () => {
-                video.play().catch(error => {
-                    console.log('Autoplay prevented:', error);
-                    // Jika autoplay diblokir, coba lagi setelah interaksi pengguna
-                    document.addEventListener('click', playVideo, { once: true });
-                });
+            // Strategi autoplay yang lebih agresif
+            const playVideoWithSound = () => {
+                video.muted = false; // Coba tanpa mute
+                video.volume = 1.0; // Volume maksimum
+                
+                const playPromise = video.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Autoplay berhasil
+                        console.log('Video diputar dengan suara');
+                    }).catch(error => {
+                        // Autoplay diblokir, coba dengan muted
+                        console.log('Autoplay dengan suara diblokir, mencoba dengan muted');
+                        video.muted = true;
+                        video.play().then(() => {
+                            // Tampilkan instruksi untuk mengaktifkan suara
+                            volumeToggle.style.backgroundColor = '#ff3a5e';
+                            volumeToggle.title = 'Klik untuk mengaktifkan suara';
+                        });
+                    });
+                }
             };
             
-            playVideo();
+            // Coba putar video setelah halaman dimuat
+            setTimeout(playVideoWithSound, 500);
+            
+            // Coba lagi setelah interaksi pengguna
+            document.addEventListener('click', function() {
+                if (video.paused) {
+                    playVideoWithSound();
+                }
+            }, { once: true });
         });
         
         // Show bug menu when TYPE BUG button is clicked
