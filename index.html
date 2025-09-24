@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DansExecute - Bug WhatsApp</title>
+    <title>DansSilentKill - The Weeknd</title>
     <style>
         * {
             margin: 0;
@@ -16,7 +16,7 @@
             background: #0a0a0a;
             color: #fff;
             line-height: 1.6;
-            background-image: url('https://files.catbox.moe/pjpbl9.jpg');
+            background-image: url('https://files.catbox.moe/on2ecg.jpg');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
@@ -72,16 +72,13 @@
         .thumbnail-section {
             margin: 30px 0;
             text-align: center;
-            display: block; /* Pastikan thumbnail-section selalu ditampilkan */
+            display: block;
         }
         
         .thumbnail {
             width: 100%;
             max-width: 800px;
             height: 350px;
-            background-image: url('https://files.catbox.moe/hy8cxl.mp4');
-            background-size: cover;
-            background-position: center;
             margin: 0 auto;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
@@ -91,9 +88,17 @@
             transition: all 0.3s ease;
         }
         
+        .thumbnail-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+        
         .thumbnail:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
+            border-color: rgba(255, 58, 94, 0.8);
         }
         
         .thumbnail-overlay {
@@ -119,6 +124,34 @@
             max-width: 600px;
         }
         
+        .video-controls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .video-btn {
+            background: rgba(255, 58, 94, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .video-btn:hover {
+            background: rgba(255, 58, 94, 1);
+            transform: scale(1.1);
+        }
+        
         .main-content {
             display: flex;
             flex-direction: column;
@@ -130,7 +163,8 @@
             background: rgba(10, 10, 10, 0.85);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 5px 20ppx solid rgba(255, 58, 94, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 58, 94, 0.3);
             display: none;
             opacity: 0;
             transform: translateY(20px);
@@ -390,14 +424,22 @@
         
         <div class="title-section">
             <img src="https://files.catbox.moe/xnu6qm.png" alt="The Weeknd Logo" class="logo">
-            <h1>DansExecute</h1>
+            <h1>DansSilentKill</h1>
         </div>
         
         <div class="thumbnail-section">
             <div class="thumbnail">
+                <video class="thumbnail-video" loop muted autoplay>
+                    <source src="https://files.catbox.moe/hy8cxl.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
                 <div class="thumbnail-overlay">
                     <h2>DansForyu</h2>
                     <p>Strike Quiet, Crash Loud</p>
+                </div>
+                <div class="video-controls">
+                    <button class="video-btn" id="playPauseBtn">⏸️</button>
+                    <button class="video-btn" id="muteBtn">🔇</button>
                 </div>
             </div>
         </div>
@@ -449,7 +491,7 @@
         </div>
         
         <footer>
-            <p>DansExecute &copy; 2025 - All Right Reserved</p>
+            <p>DansSilentKill &copy; 2023 - The Weeknd</p>
         </footer>
     </div>
 
@@ -459,6 +501,30 @@
         const showWhatsAppBtn = document.getElementById('showWhatsApp');
         const bugSection = document.getElementById('bugSection');
         const whatsappSection = document.getElementById('whatsappSection');
+        const video = document.querySelector('.thumbnail-video');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        
+        // Video controls
+        playPauseBtn.addEventListener('click', function() {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.innerHTML = '⏸️';
+            } else {
+                video.pause();
+                playPauseBtn.innerHTML = '▶️';
+            }
+        });
+        
+        muteBtn.addEventListener('click', function() {
+            if (video.muted) {
+                video.muted = false;
+                muteBtn.innerHTML = '🔊';
+            } else {
+                video.muted = true;
+                muteBtn.innerHTML = '🔇';
+            }
+        });
         
         // Show bug menu when TYPE BUG button is clicked
         showBugMenuBtn.addEventListener('click', function() {
