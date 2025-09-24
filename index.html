@@ -16,7 +16,7 @@
             background: #0a0a0a;
             color: #fff;
             line-height: 1.6;
-            background-image: url('https://files.catbox.moe/on2ecg.jpg');
+            background-image: url('https://files.catbox.moe/himhdy.jpeg');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
@@ -124,33 +124,7 @@
             max-width: 600px;
         }
         
-        .video-controls {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .video-btn {
-            background: rgba(255, 58, 94, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s;
-        }
-        
-        .video-btn:hover {
-            background: rgba(255, 58, 94, 1);
-            transform: scale(1.1);
-        }
+        /* Video controls dihapus */
         
         .main-content {
             display: flex;
@@ -429,7 +403,7 @@
         
         <div class="thumbnail-section">
             <div class="thumbnail">
-                <video class="thumbnail-video" loop autoplay>
+                <video class="thumbnail-video" loop autoplay muted playsinline>
                     <source src="https://files.catbox.moe/hy8cxl.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -437,9 +411,7 @@
                     <h2>DansForyu</h2>
                     <p>Strike Quiet, Crash Loud</p>
                 </div>
-                <div class="video-controls">
-                    <button class="video-btn" id="playPauseBtn">⏸️</button>
-                </div>
+                <!-- Tombol kontrol video dihapus -->
             </div>
         </div>
         
@@ -501,17 +473,39 @@
         const bugSection = document.getElementById('bugSection');
         const whatsappSection = document.getElementById('whatsappSection');
         const video = document.querySelector('.thumbnail-video');
-        const playPauseBtn = document.getElementById('playPauseBtn');
         
-        // Video controls - hanya play/pause
-        playPauseBtn.addEventListener('click', function() {
-            if (video.paused) {
-                video.play();
-                playPauseBtn.innerHTML = '⏸️';
-            } else {
-                video.pause();
-                playPauseBtn.innerHTML = '▶️';
+        // Video autoplay dengan muted untuk menghindari pembatasan browser
+        document.addEventListener('DOMContentLoaded', function() {
+            const logo = document.querySelector('.logo');
+            
+            // Tambahkan efek berdenyut pada logo
+            function pulseLogo() {
+                logo.style.filter = 'drop-shadow(0 0 15px rgba(255, 58, 94, 1))';
+                setTimeout(() => {
+                    logo.style.filter = 'drop-shadow(0 0 8px rgba(255, 58, 94, 0.7))';
+                }, 1000);
             }
+            
+            // Jalankan efek berdenyut setiap 2 detik
+            setInterval(pulseLogo, 2000);
+            
+            // Jalankan sekali saat halaman dimuat
+            setTimeout(pulseLogo, 500);
+            
+            // Pastikan video otomatis diputar
+            video.muted = true; // Muted untuk menghindari pembatasan autoplay
+            video.loop = true;
+            
+            // Coba putar video
+            const playVideo = () => {
+                video.play().catch(error => {
+                    console.log('Autoplay prevented:', error);
+                    // Jika autoplay diblokir, coba lagi setelah interaksi pengguna
+                    document.addEventListener('click', playVideo, { once: true });
+                });
+            };
+            
+            playVideo();
         });
         
         // Show bug menu when TYPE BUG button is clicked
@@ -615,33 +609,6 @@
                     document.querySelector('.bug-option').click();
                 }
             }, 100);
-        });
-        
-        // Tambahkan efek cahaya berdenyut pada logo saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', function() {
-            const logo = document.querySelector('.logo');
-            
-            // Tambahkan efek berdenyut pada logo
-            function pulseLogo() {
-                logo.style.filter = 'drop-shadow(0 0 15px rgba(255, 58, 94, 1))';
-                setTimeout(() => {
-                    logo.style.filter = 'drop-shadow(0 0 8px rgba(255, 58, 94, 0.7))';
-                }, 1000);
-            }
-            
-            // Jalankan efek berdenyut setiap 2 detik
-            setInterval(pulseLogo, 2000);
-            
-            // Jalankan sekali saat halaman dimuat
-            setTimeout(pulseLogo, 500);
-            
-            // Pastikan video otomatis diputar dengan suara
-            video.muted = false; // Pastikan tidak muted
-            video.play().catch(error => {
-                console.log('Autoplay prevented:', error);
-                // Jika autoplay diblokir, tampilkan pesan atau tombol play
-                playPauseBtn.style.display = 'block';
-            });
         });
     </script>
 </body>
