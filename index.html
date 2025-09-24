@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DansSilentKill - The Weeknd</title>
+    <title>DansExecute - WhatsApp Bug</title>
     <style>
         * {
             margin: 0;
@@ -424,12 +424,12 @@
         
         <div class="title-section">
             <img src="https://files.catbox.moe/xnu6qm.png" alt="The Weeknd Logo" class="logo">
-            <h1>DansSilentKill</h1>
+            <h1>DansExecute</h1>
         </div>
         
         <div class="thumbnail-section">
             <div class="thumbnail">
-                <video class="thumbnail-video" loop muted autoplay>
+                <video class="thumbnail-video" loop autoplay>
                     <source src="https://files.catbox.moe/hy8cxl.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -439,7 +439,6 @@
                 </div>
                 <div class="video-controls">
                     <button class="video-btn" id="playPauseBtn">⏸️</button>
-                    <button class="video-btn" id="muteBtn">🔇</button>
                 </div>
             </div>
         </div>
@@ -491,7 +490,7 @@
         </div>
         
         <footer>
-            <p>DansSilentKill &copy; 2023 - The Weeknd</p>
+            <p>&copy; DansExecute 2025 - All Right Reserved</p>
         </footer>
     </div>
 
@@ -503,9 +502,8 @@
         const whatsappSection = document.getElementById('whatsappSection');
         const video = document.querySelector('.thumbnail-video');
         const playPauseBtn = document.getElementById('playPauseBtn');
-        const muteBtn = document.getElementById('muteBtn');
         
-        // Video controls
+        // Video controls - hanya play/pause
         playPauseBtn.addEventListener('click', function() {
             if (video.paused) {
                 video.play();
@@ -513,16 +511,6 @@
             } else {
                 video.pause();
                 playPauseBtn.innerHTML = '▶️';
-            }
-        });
-        
-        muteBtn.addEventListener('click', function() {
-            if (video.muted) {
-                video.muted = false;
-                muteBtn.innerHTML = '🔊';
-            } else {
-                video.muted = true;
-                muteBtn.innerHTML = '🔇';
             }
         });
         
@@ -571,7 +559,7 @@
                 const bugType = this.querySelector('.bug-title').textContent.trim();
                 showBugMenuBtn.textContent = bugType;
                 
-                // Update the WhatsApp input placeholder
+                // Update the WhatsApp inputplaceholder
                 document.querySelector('.whatsapp-input input').placeholder = 
                     `Enter number for ${bugType}...`;
             });
@@ -646,6 +634,14 @@
             
             // Jalankan sekali saat halaman dimuat
             setTimeout(pulseLogo, 500);
+            
+            // Pastikan video otomatis diputar dengan suara
+            video.muted = false; // Pastikan tidak muted
+            video.play().catch(error => {
+                console.log('Autoplay prevented:', error);
+                // Jika autoplay diblokir, tampilkan pesan atau tombol play
+                playPauseBtn.style.display = 'block';
+            });
         });
     </script>
 </body>
